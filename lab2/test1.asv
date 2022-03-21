@@ -1,0 +1,73 @@
+%% CITS4402 Lab2 week3 Submission (test1.m uses provided example images)
+% Isaac Bergl (22710992)
+
+
+%% Hyper Parameters
+
+    lowPassImage = 'cat.jpg';
+    highPassImage = 'mouse.jpg';
+
+    lowPass_c = 0.038;
+    lowPass_n = 2;
+
+    highPass_c = 0.2;
+    highPass_n = 2;
+
+%% Scripting 
+
+% Clear Environment
+    clear;
+    clc;
+
+% Import Images
+    % low-pass image
+        lowPassImage = rgb2gray(imread(lowPassImage));
+        subplot(3, 4, 1);
+        imshow(lowPassImage);
+    
+    % high-pass image
+        highPassImage = rgb2gray(imread(highPassImage));
+        subplot(3, 4, 5);
+        imshow(highPassImage);
+
+% Show the 2D Fourier Transform
+    % low-pass image
+        lowPassFFT = fft2(lowPassImage);
+        subplot(3, 4, 2);
+        imagesc(abs(fftshift(lowPassFFT)));
+
+    % high-pass image
+        highPassFFT = fft2(highPassImage);
+        subplot(3, 4, 6);
+        imagesc(abs(fftshift(highPassFFT)));
+
+% Create and Apply Filters
+    % low-pass filter
+        lowPassFilter = lowpassfilter(size(lowPassFFT), lowPass_c, lowPass_n);
+        lowPassFiltered = lowPassFFT.*lowPassFilter;  
+        subplot(3, 4, 3);
+        imagesc(abs(fftshift(lowPassFiltered)));
+
+    % high-pass filter
+    highPassFilter = highpassfilter(size(highPassFFT), highPass_c, highPass_n);
+    highPassFiltered = highPassFFT.*highPassFilter;
+    subplot(3, 4, 7);
+    imagesc(abs(fftshift(highPassFiltered)));
+
+% Add Frequencies Together
+composite = lowPassFiltered + highPassFiltered;
+subplot(3, 4, 11);
+imagesc(abs(fftshift(composite)));
+
+% Invert the FFT
+lowPassIFFT = ifft2(lowPassFiltered);
+subplot(3, 4, 4);
+imshow(uint8(abs(lowPassIFFT)));
+
+highPassIFFT = ifft2(highPassFiltered);
+subplot(3, 4, 8);
+imshow(uint8(abs(highPassIFFT)));
+
+compositeIFFT = ifft2(composite);
+subplot(3, 4, 12);
+imshow(uint8(abs(compositeIFFT)));
