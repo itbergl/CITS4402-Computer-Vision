@@ -2,6 +2,9 @@
 % 22710992
 % lab02
 
+% Note: Subplot of imaqges is labelled as a matrix - each label corresponds
+%       to the whole row/columns
+
 % Clear Environment
     clear;
     clc;
@@ -11,14 +14,14 @@
   
 %% Hyper Parameters
 
-    lowPassImageName = 'rhino.jpg';
-    highPassImageName = 'frog.jpg';
+    lowPassImageName = 'john.jpg';
+    highPassImageName = 'paul.jpg';
 
     lowPass_c = 0.038;
     lowPass_n = 2;
 
-    highPass_c = 0.2;
-    highPass_n = 3;
+    highPass_c = 0.1;
+    highPass_n = 2;
 
 
 %% Scripting 
@@ -76,7 +79,7 @@
         compositeIFFT = ifft2(composite);
         subplot(3, 3, 9);
         imshow(uint8(abs(compositeIFFT)));
-
+    
 % Add Titles to Plots
     % x labels
         subplot(3,3,1);
@@ -99,5 +102,9 @@
         ylabel('Combined Image');
         set(gca, 'visible', 'off')
         set(findall(gca, 'type', 'text'), 'visible', 'on')
+
+figure();
+imshow(uint8(abs(compositeIFFT)));
+title("Output Image");
     
 
